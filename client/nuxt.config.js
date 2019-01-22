@@ -37,6 +37,10 @@ module.exports = {
   },
   modules: [
     'bootstrap-vue/nuxt',
-  ]
+    '@nuxtjs/markdownit',
+  ],
+  markdownit: {
+    injected: true
+  }
 }
 
