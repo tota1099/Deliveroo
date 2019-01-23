@@ -32,7 +32,7 @@
                 Total: ${{ price }}
               </h5>
               <p v-if="!selectedDishes.length">Please select some items.</p>
-              <button :disabled="!selectedDishes.length" class="btn btn-primary">Order</button>
+              <button :disabled="!selectedDishes.length" class="btn btn-primary" @click="goToCheckout">Order</button>
             </div>
           </div>
         </div>
@@ -46,6 +46,7 @@ import Strapi from 'strapi-sdk-javascript/build/main'
 const apiUrl = process.env.API_URL || 'http://localhost:1337'
 const strapi = new Strapi(apiUrl)
 import { mapMutations } from 'vuex'
+
 export default {
   data() {
     return {
@@ -94,7 +95,7 @@ export default {
     response.data.restaurant.dishes.forEach(dish => {
       dish.image.url = `${apiUrl}${dish.image.url}`
       store.commit('dishes/add', {
-        id: dish.id || dish._id,
+        id: dish.id,
         ...dish
       })
     })
@@ -103,7 +104,16 @@ export default {
     ...mapMutations({
       addToCard: 'card/add',
       removeFromCard: 'card/remove',
-      emptyCard: 'card/emptyList'
+      emptyCard: 'card/emptyList',
+      goToCheckout() {
+        // Redirect to signin page if not logged in.
+        const isConnected = this.$store.getters['auth/username']
+        if (!isConnected) {
+          this.$router.push('/signin')
+          return
+        }
+        this.$router.push('/checkout')
+      },
     })
   }
 }
