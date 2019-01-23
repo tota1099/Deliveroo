@@ -68,7 +68,7 @@ export default {
       response.data.restaurants.forEach(restaurant => {
         restaurant.image.url = `${apiUrl}${restaurant.image.url}`
         store.commit('restaurants/add', {
-          id: restaurant.id || restaurant.id,
+          id: restaurant.id,
           ...restaurant
         })
       })
